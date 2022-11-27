@@ -12,6 +12,10 @@ import AddListModal from './components/AddListModal';
 export default function App() {
   // Điều kiện để mở giai diện thêm task (modal)
   const [ViewModal,setVietModal] = useState(false)
+  // Render ra giao diện task lớn
+  const renderList = (list) =>{
+    return <TodoList list={list} />
+  }
   return (
     <View style={styles.container}>
       <Modal animationType='slide' visible={ViewModal} onRequestClose={()=>{
@@ -42,7 +46,7 @@ export default function App() {
          keyExtractor={item=> item.name} 
          horizontal={true}
          showsHorizontalScrollIndicator={false}
-         renderItem={({item})=> <TodoList list={item} />}
+         renderItem={({item})=> renderList(item)}
          />
       </View>
     </View>
