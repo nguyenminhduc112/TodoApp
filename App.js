@@ -12,9 +12,21 @@ import AddListModal from './components/AddListModal';
 export default function App() {
   // Điều kiện để mở giai diện thêm task (modal)
   const [ViewModal,setVietModal] = useState(false)
+  // Biến List Todo
+  const [listTodo,setListTodo] = useState(tempData)
   // Render ra giao diện task lớn
   const renderList = (list) =>{
-    return <TodoList list={list} />
+    return <TodoList list={list} updateList={updateList} />
+  }
+  // Add todo 
+  const addList = (list) =>{
+    setListTodo([...listTodo,{...list,id: listTodo.length + 1,todos:[]}])
+  }
+  // Update todo 
+  const updateList = (list) =>{
+    setListTodo(listTodo.map(item =>{
+      return item.id === list.id ? list : item
+    }))
   }
   return (
     <View style={styles.container}>
@@ -23,7 +35,7 @@ export default function App() {
       }}>
         <AddListModal closeModal={()=>{
           setVietModal(false)
-        }} />
+        }} addList={addList} />
       </Modal>
       <View style={{flexDirection:"row"}}>
         <View style={styles.divider} />
@@ -42,11 +54,12 @@ export default function App() {
       </View>
       <View style={{height:275,paddingLeft:32}}>
         <FlatList
-         data={tempData} 
+         data={listTodo} 
          keyExtractor={item=> item.name} 
          horizontal={true}
          showsHorizontalScrollIndicator={false}
          renderItem={({item})=> renderList(item)}
+         keyboardShouldPersistTaps="always"
          />
       </View>
     </View>

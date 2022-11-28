@@ -1,5 +1,6 @@
 export default tempData = [
     {
+        id:1,
         name: 'Plan a Trip',
         color:"#24A6D9",
         todos:[
@@ -22,6 +23,7 @@ export default tempData = [
         ]
     },
     {
+        id:2,
         name: 'Plan a Trip 2',
         color:"#8022D9",
         todos:[
@@ -35,7 +37,7 @@ export default tempData = [
             },
             {
                 title:"Reseve Hotel Room",
-                completed:false,
+                completed:true,
             },
             {
                 title:"Pack luggage",
@@ -44,6 +46,7 @@ export default tempData = [
         ]
     },
     {
+        id:3,
         name: 'Plan a Trip 3',
         color:"#A7CBD9",
         todos:[

@@ -5,7 +5,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen'
 // Component
 import TodoModal from './TodoModal'
 
-const TodoList = ({ list }) => {
+const TodoList = ({ list, updateList }) => {
   // Đếm lượn task hoàn thành trong kế hoạch đó
   const completedCount = list.todos.filter(todo => todo.completed).length;
   const remainingCount = list.todos.length - completedCount;
@@ -17,7 +17,7 @@ const TodoList = ({ list }) => {
       }}>
         <TodoModal list={list} closeModal={()=>{
           setShowModal(false)
-        }} />
+        }} updateList={updateList} />
       </Modal>
       <TouchableOpacity style={[styles.listContainer, { backgroundColor: list.color }]} onPress={()=>{
         setShowModal(true)

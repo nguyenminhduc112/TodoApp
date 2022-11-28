@@ -1,32 +1,52 @@
-import { StyleSheet, Text, View,KeyboardAvoidingView,TouchableOpacity, SafeAreaView, FlatList, TextInput } from 'react-native'
+import { StyleSheet, Text, View, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, FlatList, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import {AntDesign,Ionicons} from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import Colors from '../Colors';
-const TodoModal = ({ closeModal,list }) => {
-    const [name,setName] = useState(list.name)
-    const [color,setColor] = useState(list.color)
-    const [todos,setTodos] = useState(list.todos)
-
+const TodoModal = ({ closeModal, list, updateList }) => {
+    const [name, setName] = useState(list.name)
+    const [color, setColor] = useState(list.color)
+    const [todos, setTodos] = useState(list.todos)
+    const [newTodo, setNewTodo] = useState('')
     // Đêm số task và task hoàn thành
     const taskCount = todos.length
     const taskCompletedCount = todos.filter(todo => todo.completed).length
+    // Check completed
+    const toggleTodoCompleted = (index) => {
+        let listTodo = list;
+        listTodo.todos[index].completed = !listTodo.todos[index].completed
+        updateList(listTodo)
+    }
+    // Add todo
+    const addTodo = () => {
+        if (newTodo == '') {
+            alert("Bạn Phải Nhập")
+        } else {
+            let listTodo = list;
+            list.todos.push({ title: newTodo, completed: false })
+            updateList(listTodo)
+            setNewTodo("")
+        }
+    }
     // Render các task
-    const renderTodo = (todo) =>{
+    const renderTodo = (todo, index) => {
         return (
             <View style={styles.todoContainer}>
-                <TouchableOpacity>
-                    <Ionicons name='ios-square-outline' size={24} color={Colors.gray} style={{width:32}} />
+                <TouchableOpacity onPress={() => {
+                    toggleTodoCompleted(index)
+                }}>
+                    <Ionicons name={todo.completed ? 'ios-square' : 'ios-square-outline'} size={24} color={Colors.gray} style={{ width: 32 }} />
                 </TouchableOpacity>
-                <Text>{todo.title}</Text>
+                <Text style={[styles.todo, { textDecorationLine: todo.completed ? 'line-through' : 'none', color: todo.completed ? Colors.gray : Colors.black }]}>{todo.title}</Text>
             </View>
         )
     }
+
     return (
         <SafeAreaView style={styles.container} >
             <TouchableOpacity style={{ position: 'absolute', top: 64, right: 32 }} onPress={closeModal}>
                 <AntDesign name='close' size={24} color={Colors.black} />
             </TouchableOpacity>
-            <View style={[styles.section,styles.header]}>
+            <View style={[styles.section, styles.header]}>
                 <View>
                     <Text style={styles.title}>{name}</Text>
                     <Text style={styles.taskCount}>
@@ -34,18 +54,18 @@ const TodoModal = ({ closeModal,list }) => {
                     </Text>
                 </View>
             </View>
-            <View style={[styles.section,{flex:3}]} >
+            <View style={[styles.section, { flex: 3 }]} >
                 <FlatList
-                    data={todos} 
-                    renderItem={({item})=> renderTodo(item) }
+                    data={todos}
+                    renderItem={({ item, index }) => renderTodo(item, index)}
                     keyExtractor={item => item.title}
-                    contentContainerStyle={{paddingHorizontal:32,paddingVertical:64}}
+                    contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}
                     showsVerticalScrollIndicator={false}
                 />
             </View>
-            <KeyboardAvoidingView style={[styles.section,styles.footer]} behavior="padding">
-                <TextInput style={[styles.input,{borderColor:color}]} />
-                <TouchableOpacity style={[styles.addTodo,{backgroundColor:color}]}>
+            <KeyboardAvoidingView style={[styles.section, styles.footer]} behavior="padding">
+                <TextInput style={[styles.input, { borderColor: color }]} onChangeText={text => { setNewTodo(text) }} value={newTodo} />
+                <TouchableOpacity style={[styles.addTodo, { backgroundColor: color }]} onPress={addTodo}>
                     <AntDesign name='plus' size={16} color={Colors.white} />
                 </TouchableOpacity>
             </KeyboardAvoidingView>
@@ -61,48 +81,53 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    section:{
-        flex:1,
-        alignSelf:'stretch'
+    section: {
+        flex: 1,
+        alignSelf: 'stretch'
     },
-    header:{
-        justifyContent:'flex-end',
-        marginLeft:64,
-        borderBottomWidth:3,
+    header: {
+        justifyContent: 'flex-end',
+        marginLeft: 64,
+        borderBottomWidth: 3,
     },
-    title:{
-        fontSize:30,
-        fontWeight:'800',
-        color:Colors.black,
+    title: {
+        fontSize: 30,
+        fontWeight: '800',
+        color: Colors.black,
     },
-    taskCount:{
-        marginTop:4,
-        marginBottom:16,
-        color:Colors.gray,
-        fontWeight:'600'
+    taskCount: {
+        marginTop: 4,
+        marginBottom: 16,
+        color: Colors.gray,
+        fontWeight: '600'
     },
-    footer:{
-        paddingHorizontal:32,
-        flexDirection:'row',
-        alignItems:'center'
+    footer: {
+        paddingHorizontal: 32,
+        flexDirection: 'row',
+        alignItems: 'center'
     },
-    input:{
-        flex:1,
-        height:48,
-        borderWidth:StyleSheet.hairlineWidth,
-        borderRadius:6,
-        marginRight:8,
-        paddingHorizontal:8
+    input: {
+        flex: 1,
+        height: 48,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 6,
+        marginRight: 8,
+        paddingHorizontal: 8
     },
-    addTodo:{
-        borderRadius:4,
-        padding:16,
-        alignItems:'center',
-        justifyContent:'center'
+    addTodo: {
+        borderRadius: 4,
+        padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
-    todoContainer:{
-        paddingVertical:16,
-        flexDirection:'row',
-        alignItems:'center'
+    todoContainer: {
+        paddingVertical: 16,
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    todo: {
+        color: Colors.black,
+        fontWeight: '700',
+        fontSize: 16
     }
 })

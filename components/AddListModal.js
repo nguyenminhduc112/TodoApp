@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import {AntDesign} from '@expo/vector-icons';
 import Colors from '../Colors';
 import tempData from '../tempData';
-const AddListModal = ({closeModal}) => {
+const AddListModal = ({closeModal,addList}) => {
   const backgroundColor = ['#5CD859','#24A6D9','#595BD9','#8022D9','#D159D8','#D85963','#D88559']
   const [pointColor,setPointColor] = useState(backgroundColor[0])
   const [nameTitle,setNameTitle] = useState("")
@@ -21,11 +21,8 @@ const AddListModal = ({closeModal}) => {
   const createTodo = () =>{
     const name = nameTitle;
     const color = pointColor;
-    tempData.push({
-      name,
-      color,
-      todos:[]
-    })
+    const list = {name,color}
+    addList(list)
     setNameTitle("")
     setPointColor(backgroundColor[0])
     closeModal()
