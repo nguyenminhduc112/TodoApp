@@ -19,7 +19,7 @@ const TodoList = ({ list, updateList }) => {
           setShowModal(false)
         }} updateList={updateList} />
       </Modal>
-      <TouchableOpacity style={[styles.listContainer, { backgroundColor: list.color }]} onPress={()=>{
+      <TouchableOpacity style={[styles.listContainer, { backgroundColor: list.color,opacity: remainingCount == 0 && completedCount > 0 ? 0.5 : 1  }]} onPress={()=>{
         setShowModal(true)
       }}>
         <Text style={styles.listTitle} numberOfLines={1}>

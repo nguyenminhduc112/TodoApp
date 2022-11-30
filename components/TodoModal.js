@@ -14,6 +14,15 @@ const TodoModal = ({ closeModal, list, updateList }) => {
     const toggleTodoCompleted = (index) => {
         let listTodo = list;
         listTodo.todos[index].completed = !listTodo.todos[index].completed
+        
+        fetch(`https://6385b0aabeaa6458266587ad.mockapi.io/api/ListTodo/${list.id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(listTodo)
+        });
         updateList(listTodo)
     }
     // Add todo
@@ -23,6 +32,14 @@ const TodoModal = ({ closeModal, list, updateList }) => {
         } else {
             let listTodo = list;
             list.todos.push({ title: newTodo, completed: false })
+            fetch(`https://6385b0aabeaa6458266587ad.mockapi.io/api/ListTodo/${list.id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(listTodo)
+        });
             updateList(listTodo)
             setNewTodo("")
         }
@@ -58,7 +75,7 @@ const TodoModal = ({ closeModal, list, updateList }) => {
                 <FlatList
                     data={todos}
                     renderItem={({ item, index }) => renderTodo(item, index)}
-                    keyExtractor={item => item.title}
+                    keyExtractor={(_, index) => index.toString()}
                     contentContainerStyle={{ paddingHorizontal: 32, paddingVertical: 64 }}
                     showsVerticalScrollIndicator={false}
                 />
