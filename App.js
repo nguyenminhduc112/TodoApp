@@ -50,7 +50,7 @@ export default function App() {
 
   // Render ra giao diện task lớn
   const renderList = (list) => {
-    return <TodoList list={list} updateList={updateList} />
+    return <TodoList list={list} updateList={updateList} updateAll={updateAll} />
   }
   // Add todo 
   const addList = (list) => {
@@ -71,13 +71,21 @@ export default function App() {
     })();
   }
   // Update todo 
-  const updateList = (list) => {
+  const updateList =  (list) => {
     const listOke = listTodo.map(item => {
       return item.id === list.id ? list : item
     })
     setListTodo(listOke)
-
   }
+  const updateAll = () =>{
+    fetch('https://6385b0aabeaa6458266587ad.mockapi.io/api/ListTodo')
+    .then((response) => response.json())
+    .then((json) => setListTodo(json))
+    .catch((error) => console.error(error))
+    .finally(() => setLoading(false));
+  }
+
+
 
   function sortData() {
     let sortedArray = [];
